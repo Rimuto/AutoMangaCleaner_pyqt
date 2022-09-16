@@ -14,19 +14,15 @@ class WorkingArea(QWidget):
 
     def loadImage(self):
         self.view.setMainImage(QPixmap('image.jpg'))
-        # self.grScene.addImage()
 
     def initUI(self):
 
         self.setGeometry(0, 0, 800, 800)
-
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
-
         self.grScene = QDMWorkingAreaScene()
-
 
         self.view = QDMGraphicsView(self.grScene, self)
         self.layout.addWidget(self.view)
@@ -48,8 +44,6 @@ class WorkingArea(QWidget):
         self.view.mouseMoveEvent()
 
     def addContent(self):
-        greenBrush = QBrush(Qt.green)
-        outlinePen = QPen(Qt.black)
         # rect = self.grScene.addRect(-50, -50, 100, 100, outlinePen, greenBrush)
         # rect.setFlag(QGraphicsItem.ItemIsSelectable)
         # rect.setFlag(QGraphicsItem.ItemIsMovable)
@@ -61,4 +55,4 @@ class WorkingArea(QWidget):
         # text.setDefaultTextColor(QColor.fromRgbF(1.0, 1.0, 1.0))
 
         #tagItem = QDMTextItem("myText")  # create a NodeTag item
-        #self.grScene.addText()
+        self.grScene.addText()

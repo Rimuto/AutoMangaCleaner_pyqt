@@ -24,13 +24,12 @@ class QDMGraphicsView(QGraphicsView):
         #fonts, color, outline etc.
 
         #brush drawing settings
-        #self.brush = QGraphicsEllipseItem
         self.drawingMode = True
+        self.is_drawing = self.drawingMode
         self.brushSize = 10
         self.brushColor = Qt.black
         self.lastPoint = QPoint()
-        self.brush_line_pen = QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap)
-        # self.brush = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
+        self.brush_line_pen = QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
         #scene settings
         self.grScene = grScene
         self.initUI()
@@ -51,16 +50,19 @@ class QDMGraphicsView(QGraphicsView):
         if self.drawingMode:
             self.brush = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
             self.brush.setFlag(QGraphicsItem.ItemIsMovable)
+            self.brush.setAcceptedMouseButtons(Qt.NoButton)
             self.brush.setZValue(100)
 
     def initUI(self):
-        #pass
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform)
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
-
         #self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         #self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
+    def initial_path(self):
+        self._path = QPainterPath()
+        pen = self.brush_line_pen
+        self._path_item = self.grScene.addPath(self._path, pen)
 
     def setMainImage(self, pixmapItem):
         self.grScene.setImage(pixmapItem)
@@ -71,7 +73,9 @@ class QDMGraphicsView(QGraphicsView):
             x = self.mapToScene(event.pos()).x()
             y = self.mapToScene(event.pos()).y()
             self.grScene.drawCircle(x - self.brushSize / 2, y - self.brushSize / 2, self.brushSize, QPen(Qt.NoPen), self.brushColor)
-            self.lastPoint = self.mapToScene(event.pos())
+            self.initial_path()
+            self._path.moveTo(self.mapToScene(event.pos()))
+            self._path_item.setPath(self._path)
         elif event.button() == Qt.LeftButton:
             self._mousePressed = True
             if self._isPanning:
@@ -86,15 +90,10 @@ class QDMGraphicsView(QGraphicsView):
             x = self.mapToScene(event.pos()).x()
             y = self.mapToScene(event.pos()).y()
             self.brush.setPos(x - self.brushSize / 2, y - self.brushSize / 2)
-        if(event.buttons() & Qt.LeftButton) & self.drawingMode:
-            x = self.mapToScene(event.pos()).x()
-            y = self.mapToScene(event.pos()).y()
-            #self.brush.setPos(x, y)
 
-            self.grScene.drawLine(self.lastPoint.x(), self.lastPoint.y(), x, y, self.brush_line_pen)
-            self.lastPoint = self.mapToScene(event.pos())
-
-
+        if(event.buttons() == Qt.LeftButton) & self.drawingMode:
+            self._path.lineTo(self.mapToScene(event.pos()))
+            self._path_item.setPath(self._path)
         elif self._mousePressed and self._isPanning:
             newPos = event.pos()
             diff = newPos - self._dragPos
@@ -108,6 +107,7 @@ class QDMGraphicsView(QGraphicsView):
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
+            self.grScene.drawingGroup.addToGroup(self._path_item)
             if event.modifiers() & Qt.ControlModifier:
                 self.setCursor(Qt.OpenHandCursor)
             else:
@@ -119,12 +119,15 @@ class QDMGraphicsView(QGraphicsView):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Control and not self._mousePressed:
             self._isPanning = True
+            self.drawingMode = False
             self.setCursor(Qt.OpenHandCursor)
         else:
             super(QDMGraphicsView, self).keyPressEvent(event)
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
+            if self.is_drawing:
+                self.drawingMode = True
             if not self._mousePressed:
                 self._isPanning = False
                 self.setCursor(Qt.ArrowCursor)
@@ -157,18 +160,6 @@ class QDMGraphicsView(QGraphicsView):
             self.zoom, zoomFactor = self.getZoomStep("-")
         self.scale(zoomFactor, zoomFactor)
 
-    # def setImage(self, pixmap=None):
-    #     if pixmap and not pixmap.isNull():
-    #         self.empty = False
-    #         self.photo.setPixmap(pixmap)
-    #     else:
-    #         self.empty = True
-    #         self.photo.setPixmap(QPixmap())
-    #     self.fitInView()
-    #
-    # def hasPhoto(self):
-    #     return not self.empty
-
     def fitInView(self, scale=True):
         rect = QRectF(self.grScene.mainImage.pixmap().rect())
         if not rect.isNull():
@@ -176,9 +167,4 @@ class QDMGraphicsView(QGraphicsView):
             if self.grScene.hasPhoto():
                 unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
                 self.scale(1 / unity.width(), 1 / unity.height())
-                # viewrect = self.viewport().rect()
-                # scenerect = self.transform().mapRect(rect)
-                # factor = min(viewrect.width() / scenerect.width(),
-                #              viewrect.height() / scenerect.height())
-                # self.scale(factor, factor)
             self.zoom = 5
