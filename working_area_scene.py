@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from working_area_text_item import QDMTextItem
 from PyQt5.QtGui import *
-import math
 
 '''
 add drawing methods to store all lines and dots
@@ -48,19 +47,6 @@ class QDMWorkingAreaScene(QGraphicsScene):
 
     def hasPhoto(self):
         return not self.empty
-
-    def draw(self):
-        self.addEllipse(-100, -100, 0, 0, QPen(Qt.NoPen), Qt.black)
-
-    def drawCircle(self, x, y, brushSize, pen, brush):
-        item = QGraphicsEllipseItem(
-            round(x), round(y),
-            brushSize, brushSize,
-            self.drawingGroup
-        )
-        item.setPen(pen)
-        item.setBrush(brush)
-        self.drawingGroup.addToGroup(item)
 
     def serialize(self):
         json = {}
