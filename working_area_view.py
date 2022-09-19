@@ -12,8 +12,6 @@ PLAN IS:
     LAYERS OR SMTH.? I DUNNO
     Можно рисовать на pixmap'e а не добавлять объекты на сцену, это должно помочь с лагами, если получиться 
 """
-
-
 class AddCommand(QUndoCommand):
     def __init__(self, item, scene):
         super().__init__()
@@ -34,6 +32,10 @@ class AddCommand(QUndoCommand):
 class QDMGraphicsView(QGraphicsView):
     def __init__(self, grScene, parent = None):
         super().__init__(parent)
+    # scene settings
+        self.grScene = grScene
+        self.initUI()
+        self.setScene(self.grScene)
 
         self.empty = True
         self.photo = QGraphicsPixmapItem()
@@ -42,17 +44,18 @@ class QDMGraphicsView(QGraphicsView):
         #fonts, color, outline etc.
 
     #brush drawing settings
-        self.drawingMode = True
-        self.is_drawing = True
+        self.drawingMode = False
+        self.is_drawing = False
         self.brushSize = 10
         self.brushColor = Qt.black
         self.lastPoint = QPoint()
         self.brush_line_pen = QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
 
-    #scene settings
-        self.grScene = grScene
-        self.initUI()
-        self.setScene(self.grScene)
+        self.brushCursor = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
+        self.brushCursor.setFlag(QGraphicsItem.ItemIsMovable)
+        self.brushCursor.setZValue(-1)
+        self.brushCursor.setAcceptedMouseButtons(Qt.NoButton)
+
     #pan settings
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self._isPanning = False
@@ -65,17 +68,37 @@ class QDMGraphicsView(QGraphicsView):
         self.zoomStep = 1
         self.zoomRange = [0, 20]
 
-        if self.drawingMode:
-            self.brush = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
-            self.brush.setFlag(QGraphicsItem.ItemIsMovable)
-            self.brush.setAcceptedMouseButtons(Qt.NoButton)
-            self.brush.setZValue(100)
+        # if self.drawingMode:
+        #     self.brush = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
+        #     self.brush.setFlag(QGraphicsItem.ItemIsMovable)
+        #     self.brush.setAcceptedMouseButtons(Qt.NoButton)
+        #     self.brush.setZValue(100)
 
     def initUI(self):
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform)
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         #self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         #self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def setDrawingMode(self, mode):
+        if mode:
+            self.setDragMode(QGraphicsView.NoDrag)
+            self.drawingMode = True
+            self.is_drawing = True
+            self.showBrushCursor()
+        else:
+            self.setDragMode(QGraphicsView.RubberBandDrag)
+            self.drawingMode = False
+            self.is_drawing = False
+            self.hideBrushCursor()
+
+    def showBrushCursor(self):
+        self.brushCursor.setVisible(True)
+        self.brushCursor.setZValue(100)
+
+    def hideBrushCursor(self):
+        self.brushCursor.setZValue(-1)
+        self.brushCursor.setVisible(False)
 
     def initialLinePath(self):
         self._path = QPainterPath()
@@ -119,12 +142,13 @@ class QDMGraphicsView(QGraphicsView):
                 event.accept()
             else:
                 super(QDMGraphicsView, self).mousePressEvent(event)
+        super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
         if self.drawingMode:
             x = self.mapToScene(event.pos()).x()
             y = self.mapToScene(event.pos()).y()
-            self.brush.setPos(x - self.brushSize / 2, y - self.brushSize / 2)
+            self.brushCursor.setPos(x - self.brushSize / 2, y - self.brushSize / 2)
         if(event.buttons() == Qt.LeftButton) & self.drawingMode:
             self.deleteCircle()
             self.drawLine(event.pos())
@@ -141,25 +165,35 @@ class QDMGraphicsView(QGraphicsView):
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
-            if self.circle_path_item is None:
+            if self.drawingMode is True and self.circle_path_item is None:
                 self.grScene.drawingGroup.addToGroup(self._path_item)
                 self.undoStack.push(AddCommand(self._path_item, self.grScene))
-            else:
+            elif self.drawingMode is True and self.circle_path_item is not None:
                 self.undoStack.push(AddCommand(self.circle_path_item, self.grScene))
             if event.modifiers() & Qt.ControlModifier:
                 self.setCursor(Qt.OpenHandCursor)
             else:
+
                 self._isPanning = False
                 self.setCursor(Qt.ArrowCursor)
             self._mousePressed = False
         super(QDMGraphicsView, self).mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
+        if event.key() == Qt.Key_D:
+            self.setDrawingMode(False)
+        if event.key() == Qt.Key_S:
+            self.setDrawingMode(True)
         if event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier:
             self.undoStack.undo()
         elif event.key() == Qt.Key_Y and event.modifiers() == Qt.ControlModifier:
             self.undoStack.redo()
+
+        if event.key() == Qt.Key_Control:
+            self.setDragMode(QGraphicsView.NoDrag)
+            print(self._mousePressed)
         if event.key() == Qt.Key_Control and not self._mousePressed:
+            self.hideBrushCursor()
             self._isPanning = True
             self.drawingMode = False
             self.setCursor(Qt.OpenHandCursor)
@@ -168,9 +202,12 @@ class QDMGraphicsView(QGraphicsView):
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
+            self.setDragMode(QGraphicsView.RubberBandDrag)
             if self.is_drawing:
+                self.showBrushCursor()
                 self.drawingMode = True
             if not self._mousePressed:
+
                 self._isPanning = False
                 self.setCursor(Qt.ArrowCursor)
         elif event.key() == Qt.Key_Delete:

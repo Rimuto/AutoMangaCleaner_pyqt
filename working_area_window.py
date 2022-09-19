@@ -38,7 +38,7 @@ class WorkingArea(QWidget):
         #self.showMaximized()
 
         self.addContent()
-        self.view.setFocus()
+        #self.view.setFocus()
 
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
