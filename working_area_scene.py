@@ -2,14 +2,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from working_area_text_item import QDMTextItem
 from PyQt5.QtGui import *
-
+from working_area_bounding_rect import QDMBoundingRect
 '''
 add drawing methods to store all lines and dots
 '''
 class QDMWorkingAreaScene(QGraphicsScene):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         self.drawingGroup = self.createItemGroup([])
         blur = QGraphicsBlurEffect(blurRadius=1)
         self.drawingGroup.setGraphicsEffect(blur)
@@ -27,13 +26,16 @@ class QDMWorkingAreaScene(QGraphicsScene):
 
         self.setBackgroundBrush(self._color_background)
 
+    def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        super().mousePressEvent(event)
+
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
 
     def addText(self, text = "Sample Text"):
-        self.textItems.append(QDMTextItem("myText"))
+        self.textItems.append(QDMBoundingRect(QDMTextItem("myText")))
         self.addItem(self.textItems[-1])
-        self.drawingGroup.addToGroup(self.textItems[-1])
+        # self.drawingGroup.addToGroup(self.textItems[-1])
 
     def setImage(self, pixmap=None):
         if pixmap and not pixmap.isNull():

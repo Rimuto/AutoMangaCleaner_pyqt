@@ -11,6 +11,15 @@ PLAN IS:
     (DONE)  BRUSH DRAWING
     LAYERS OR SMTH.? I DUNNO
     Можно рисовать на pixmap'e а не добавлять объекты на сцену, это должно помочь с лагами, если получиться 
+    
+    для поворота:
+        находить уравнение нормали от точки до окружности
+        находить точку пересечения нормали и окружности
+        брать координаты курсора и соответственно им задавать координаты ручки на окружности
+        НЕТ, еще лучше
+            - ищем координаты вектора (мы знаем его начало и конец)
+            - ищемкоординаты конца короткого вектора у которого мы знаем начало и длину
+            
 """
 class AddCommand(QUndoCommand):
     def __init__(self, item, scene):
@@ -140,8 +149,8 @@ class QDMGraphicsView(QGraphicsView):
                 self.setCursor(Qt.ClosedHandCursor)
                 self._dragPos = event.pos()
                 event.accept()
-            else:
-                super(QDMGraphicsView, self).mousePressEvent(event)
+            # else:
+            #     super(QDMGraphicsView, self).mousePressEvent(event)
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
@@ -159,8 +168,9 @@ class QDMGraphicsView(QGraphicsView):
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - diff.x())
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() - diff.y())
             event.accept()
-        else:
-            super(QDMGraphicsView, self).mouseMoveEvent(event)
+        #
+        # else:
+        #     super(QDMGraphicsView, self).mouseMoveEvent(event)
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
