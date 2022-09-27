@@ -221,7 +221,10 @@ class QDMGraphicsView(QGraphicsView):
                 self._isPanning = False
                 self.setCursor(Qt.ArrowCursor)
         elif event.key() == Qt.Key_Delete:
-            self.deleteSelected()
+            for i in self.grScene.selectedItems():
+                if i.item.textInteractionFlags() != Qt.TextEditorInteraction:
+                    self.grScene.removeItem(i)
+                    #self.deleteSelected()
         else:
             super(QDMGraphicsView, self).keyPressEvent(event)
 
