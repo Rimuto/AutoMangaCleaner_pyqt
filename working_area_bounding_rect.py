@@ -23,13 +23,30 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.center = QGraphicsEllipseItem(-5, -5, 10, 10, self)
         self.center.setPen(QPen(Qt.NoPen))
         self.handle = QGraphicsRectItem(-10, -10, 20, 20, self)
+        self.handle.setPen(QPen(Qt.blue))
 
         # self.vect = QGraphicsLineItem(self)
         # self.secVect = QGraphicsLineItem(self)
         # self.secVect.setPen(Qt.green)
         # self.secVect.setFlags(self.ItemIgnoresTransformations)
-
+        self.hideRect()
         self.setCenter(item.transformOriginPoint())
+
+    def hideRect(self):
+        self.setPen(QPen(Qt.NoPen))
+        self.handle.setVisible(False)
+
+    def showRect(self):
+        self.setPen(QPen(Qt.blue))
+        self.handle.setVisible(True)
+
+    def paint(self, painter, option, widget=None):
+        option.state &= ~QStyle.State_Selected
+        super().paint(painter, option, widget)
+        if self.isSelected():
+            self.showRect()
+        elif not self.isSelected():
+            self.hideRect()
 
     def setCenter(self, center):
         self.center.setPos(center)

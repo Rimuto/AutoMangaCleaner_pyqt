@@ -25,6 +25,7 @@ class QDMTextItem(QGraphicsTextItem):
     def paint(self, painter, option, widget):
         #painter.setPen(QPen(Qt.blue, 2, Qt.SolidLine))
         #painter.drawRect(self.boundingRect())
+        option.state &= ~QStyle.State_Selected
         super().paint(painter, option, widget)
 
     def shape(self):
@@ -42,7 +43,6 @@ class QDMTextItem(QGraphicsTextItem):
             self.setFocus()
             textCursor = self.textCursor()
             self.setTextCursor(textCursor)
-
 
     def keyPressEvent(self, event):
         super().keyPressEvent(event)
