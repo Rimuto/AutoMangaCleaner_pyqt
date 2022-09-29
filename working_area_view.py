@@ -201,8 +201,9 @@ class QDMGraphicsView(QGraphicsView):
 
         if event.key() == Qt.Key_Control:
             self.setDragMode(QGraphicsView.NoDrag)
-            print(self._mousePressed)
+            #print(self._mousePressed)
         if event.key() == Qt.Key_Control and not self._mousePressed:
+            self.setDragMode(QGraphicsView.NoDrag)
             self.hideBrushCursor()
             self._isPanning = True
             self.drawingMode = False
@@ -212,10 +213,13 @@ class QDMGraphicsView(QGraphicsView):
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
-            self.setDragMode(QGraphicsView.RubberBandDrag)
+
             if self.is_drawing:
+                #self.setDragMode(QGraphicsView.NoDrag)
                 self.showBrushCursor()
                 self.drawingMode = True
+            else:
+                self.setDragMode(QGraphicsView.RubberBandDrag)
             if not self._mousePressed:
 
                 self._isPanning = False

@@ -36,7 +36,6 @@ class WorkingArea(QWidget):
         self.loadImage()
         self.show()
         #self.showMaximized()
-
         self.addContent()
         #self.view.setFocus()
 
