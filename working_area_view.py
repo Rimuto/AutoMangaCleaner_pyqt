@@ -213,7 +213,6 @@ class QDMGraphicsView(QGraphicsView):
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
-
             if self.is_drawing:
                 #self.setDragMode(QGraphicsView.NoDrag)
                 self.showBrushCursor()
