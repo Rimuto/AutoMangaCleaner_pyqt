@@ -12,19 +12,27 @@ class WorkingArea(QWidget):
         super().__init__(parent)
         self.initUI()
 
-    def loadImage(self):
-        self.view.setMainImage(QPixmap('image.jpg'))
+    def getScene(self):
+        return self.view.grScene
+
+    def setScene(self, scene):
+        self.view.grScene = scene
+        self.view.setScene(self.view.grScene)
+        self.view.fitInView()
+        self.view.initBrushCursor()
+
+    def loadImage(self, path="image.jpg"):
+        self.view.setMainImage(QPixmap(path))
 
     def initUI(self):
-
         self.setGeometry(0, 0, 800, 800)
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
+        #self.grScene = QDMWorkingAreaScene()
+        self.view = QDMGraphicsView(self)
 
-        self.grScene = QDMWorkingAreaScene()
 
-        self.view = QDMGraphicsView(self.grScene, self)
         self.layout.addWidget(self.view)
         gl = QOpenGLWidget()
         gl.setMouseTracking(True)
@@ -32,7 +40,7 @@ class WorkingArea(QWidget):
         format.setSamples(4)
         gl.setFormat(format)
         self.view.setViewport(gl)
-        self.setWindowTitle("AutoMangaCleaner")
+        #self.setWindowTitle("AutoMangaCleaner")
         self.loadImage()
         self.show()
         #self.showMaximized()
@@ -41,6 +49,12 @@ class WorkingArea(QWidget):
 
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
+
+    def addImage(self, x, y, image, tag):
+        self.view.addImage(x, y, image, tag)
+
+    def delImage(self, tag):
+        self.view.delImage(tag)
 
     def addContent(self):
         # rect = self.grScene.addRect(-50, -50, 100, 100, outlinePen, greenBrush)
@@ -54,4 +68,4 @@ class WorkingArea(QWidget):
         # text.setDefaultTextColor(QColor.fromRgbF(1.0, 1.0, 1.0))
 
         #tagItem = QDMTextItem("myText")  # create a NodeTag item
-        self.grScene.addText()
+        self.view.addText()

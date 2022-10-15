@@ -16,11 +16,13 @@ class QDMWorkingAreaScene(QGraphicsScene):
 
         self._color_background = QColor("#393939")
 
+        self.imageItems = {}
         self.textItems = []
 
         self.empty = True
         self.mainImage = QGraphicsPixmapItem()
         self.mainImage.setTransformationMode(Qt.SmoothTransformation)
+        self.mainImage.setZValue(0)
 
         self.dirtySpeechBubbles = []
 
@@ -49,6 +51,13 @@ class QDMWorkingAreaScene(QGraphicsScene):
 
     def hasPhoto(self):
         return not self.empty
+
+    def addImage(self, x, y, image, tag):
+        self.imageItems[tag] = self.addPixmap(QPixmap(image))
+        self.imageItems[tag].setPos(x, y)
+
+    def delImage(self, tag):
+        self.removeItem(self.imageItems[tag])
 
     def serialize(self):
         json = {}

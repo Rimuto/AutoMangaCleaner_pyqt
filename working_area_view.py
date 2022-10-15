@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-
+from working_area_scene import QDMWorkingAreaScene
 """
 PLAN IS:
     (DONE)  PAN & ZOOM
@@ -39,10 +39,10 @@ class AddCommand(QUndoCommand):
 
 
 class QDMGraphicsView(QGraphicsView):
-    def __init__(self, grScene, parent = None):
+    def __init__(self, parent = None):
         super().__init__(parent)
     # scene settings
-        self.grScene = grScene
+        self.grScene = QDMWorkingAreaScene()
         self.initUI()
         self.setScene(self.grScene)
 
@@ -60,10 +60,12 @@ class QDMGraphicsView(QGraphicsView):
         self.lastPoint = QPoint()
         self.brush_line_pen = QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
 
-        self.brushCursor = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
-        self.brushCursor.setFlag(QGraphicsItem.ItemIsMovable)
-        self.brushCursor.setZValue(-1)
-        self.brushCursor.setAcceptedMouseButtons(Qt.NoButton)
+
+        self.initBrushCursor()
+        # self.brushCursor = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
+        # self.brushCursor.setFlag(QGraphicsItem.ItemIsMovable)
+        # self.brushCursor.setZValue(-1)
+        # self.brushCursor.setAcceptedMouseButtons(Qt.NoButton)
 
     #pan settings
         self.setDragMode(QGraphicsView.RubberBandDrag)
@@ -88,6 +90,18 @@ class QDMGraphicsView(QGraphicsView):
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         #self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         #self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def initBrushCursor(self):
+        self.brushCursor = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
+        self.brushCursor.setFlag(QGraphicsItem.ItemIsMovable)
+        if self.drawingMode:
+            self.brushCursor.setZValue(100)
+        else:
+            self.brushCursor.setZValue(-1)
+        self.brushCursor.setAcceptedMouseButtons(Qt.NoButton)
+
+    def addText(self):
+        self.grScene.addText()
 
     def setDrawingMode(self, mode):
         if mode:
@@ -263,3 +277,9 @@ class QDMGraphicsView(QGraphicsView):
                 unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
                 self.scale(1 / unity.width(), 1 / unity.height())
             self.zoom = 5
+
+    def addImage(self, x, y, image, tag):
+        self.grScene.addImage(x, y, image, tag)
+
+    def delImage(self, tag):
+        self.grScene.delImage(tag)
