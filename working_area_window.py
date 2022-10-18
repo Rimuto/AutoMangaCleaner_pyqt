@@ -44,7 +44,7 @@ class WorkingArea(QWidget):
         self.loadImage()
         self.show()
         #self.showMaximized()
-        self.addContent()
+        self.addText()
         #self.view.setFocus()
 
     def mouseMoveEvent(self, event):
@@ -56,7 +56,17 @@ class WorkingArea(QWidget):
     def delImage(self, tag):
         self.view.delImage(tag)
 
-    def addContent(self):
+    def setTextFont(self, font):
+        self.view.setTextItemFont(font)
+
+    def setTextFontSize(self, value):
+        self.view.setFontSize(value)
+
+
+    def deleteSelectedObject(self):
+        self.view.deleteSelected()
+
+    def addText(self):
         # rect = self.grScene.addRect(-50, -50, 100, 100, outlinePen, greenBrush)
         # rect.setFlag(QGraphicsItem.ItemIsSelectable)
         # rect.setFlag(QGraphicsItem.ItemIsMovable)

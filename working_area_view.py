@@ -283,3 +283,33 @@ class QDMGraphicsView(QGraphicsView):
 
     def delImage(self, tag):
         self.grScene.delImage(tag)
+
+    def setTextItemFont(self, font):
+        for item in self.grScene.selectedItems():
+            #add type check
+            t = item.item.textCursor()
+            if len(t.selectedText()) > 0:
+                format = t.charFormat()
+                pointSize = format.font().pointSize()
+                font.setPointSize(pointSize)
+                format.setFont(font)
+                t.setCharFormat(format)
+            else:
+                pointSize = item.item.font().pointSize()
+                font.setPointSize(pointSize)
+                item.item.setFont(font)
+            item.updateBoundingRect()
+
+    def setFontSize(self, value):
+        for item in self.grScene.selectedItems():
+            # add type check
+            t = item.item.textCursor()
+            if len(t.selectedText()) > 0:
+                format = t.charFormat()
+                format.setFontPointSize(value)
+                t.setCharFormat(format)
+            else:
+                font = item.item.font()
+                font.setPointSize(value)
+                item.item.setFont(font)
+            item.updateBoundingRect()
