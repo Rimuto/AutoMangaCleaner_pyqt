@@ -50,6 +50,9 @@ class WorkingArea(QWidget):
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
 
+    def setLineHeight(self, value):
+        self.view.setLineHeight(value)
+
     def addImage(self, x, y, image, tag):
         self.view.addImage(x, y, image, tag)
 

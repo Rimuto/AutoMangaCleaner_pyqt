@@ -291,6 +291,7 @@ class Ui_MainWindow(object):
         self.delete_text_btn.clicked.connect(self.deleleteSelected)
         self.fontComboBox.currentFontChanged.connect(self.setTextItemFont)
         self.font_size_spn.valueChanged.connect(self.setFontSize)
+        self.height_spn.valueChanged.connect(self.setLineHeight)
 
 
     def retranslateUi(self, MainWindow):
@@ -320,15 +321,16 @@ class Ui_MainWindow(object):
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
 
+
+    def setLineHeight(self, value):
+        self.graphicsView.setLineHeight(value)
+
     def setFontSize(self, value):
-
         self.graphicsView.setTextFontSize(value)
-
 
     def setTextItemFont(self):
         font = self.fontComboBox.currentFont()
         self.graphicsView.setTextFont(font)
-
 
     def deleleteSelected(self):
         self.graphicsView.deleteSelectedObject()

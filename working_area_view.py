@@ -313,3 +313,17 @@ class QDMGraphicsView(QGraphicsView):
                 font.setPointSize(value)
                 item.item.setFont(font)
             item.updateBoundingRect()
+
+    def setLineHeight(self, value):
+        for item in self.grScene.selectedItems():
+            # add type check
+            t = item.item.document()
+            c = item.item.textCursor()
+
+            for blockIndex in range(t.blockCount()):
+                block = t.findBlock(blockIndex)
+                f = block.blockFormat()
+                f.setLineHeight(value, QTextBlockFormat.LineDistanceHeight)
+                c.setBlockFormat(f)
+
+            item.updateBoundingRect()
