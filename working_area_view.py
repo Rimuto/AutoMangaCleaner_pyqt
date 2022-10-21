@@ -327,3 +327,7 @@ class QDMGraphicsView(QGraphicsView):
                 c.setBlockFormat(f)
 
             item.updateBoundingRect()
+
+    def setRotationAngle(self, value):
+        for item in self.grScene.selectedItems():
+            item.setRotation(value)

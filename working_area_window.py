@@ -65,6 +65,8 @@ class WorkingArea(QWidget):
     def setTextFontSize(self, value):
         self.view.setFontSize(value)
 
+    def setRotationAngle(self, value):
+        self.view.setRotationAngle(value)
 
     def deleteSelectedObject(self):
         self.view.deleteSelected()

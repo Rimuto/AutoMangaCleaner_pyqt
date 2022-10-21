@@ -284,6 +284,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.angle_spn.setRange(-360, 360)
         self.nextButton.clicked.connect(lambda: self.shiftContext("forward"))
         self.prevButton.clicked.connect(lambda: self.shiftContext("backward"))
         self.actionOpen_image.triggered.connect(self.openFile)
@@ -292,6 +293,7 @@ class Ui_MainWindow(object):
         self.fontComboBox.currentFontChanged.connect(self.setTextItemFont)
         self.font_size_spn.valueChanged.connect(self.setFontSize)
         self.height_spn.valueChanged.connect(self.setLineHeight)
+        self.angle_spn.valueChanged.connect(self.setRotationAngle)
 
 
     def retranslateUi(self, MainWindow):
@@ -321,6 +323,8 @@ class Ui_MainWindow(object):
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
 
+    def setRotationAngle(self, value):
+        self.graphicsView.setRotationAngle(value)
 
     def setLineHeight(self, value):
         self.graphicsView.setLineHeight(value)
