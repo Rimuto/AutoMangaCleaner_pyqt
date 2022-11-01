@@ -185,6 +185,16 @@ class Ui_MainWindow(object):
         self.italic_btn.setFont(font)
         self.italic_btn.setObjectName("italic_btn")
         self.gridLayout_2.addWidget(self.italic_btn, 0, 5, 1, 1)
+
+        self.text_color_picker = QtWidgets.QPushButton(self.controls)
+        self.text_color_picker.setText("")
+        self.text_color_picker.setObjectName("text_color_picker")
+        self.gridLayout_2.addWidget(self.text_color_picker, 2, 1, 1, 1)
+        self.brush_color_picker = QtWidgets.QPushButton(self.controls)
+        self.brush_color_picker.setText("")
+        self.brush_color_picker.setObjectName("brush_color_picker")
+        self.gridLayout_2.addWidget(self.brush_color_picker, 2, 11, 1, 1)
+
         self.verticalLayout.addWidget(self.controls)
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -294,7 +304,8 @@ class Ui_MainWindow(object):
         self.font_size_spn.valueChanged.connect(self.setFontSize)
         self.height_spn.valueChanged.connect(self.setLineHeight)
         self.angle_spn.valueChanged.connect(self.setRotationAngle)
-
+        self.text_color_picker.clicked.connect(self.getFontColor)
+        self.brush_color_picker.clicked.connect(self.getBrushColor)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -322,6 +333,24 @@ class Ui_MainWindow(object):
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    def getFontColor(self):
+        color = self.openColorPickerDialog()
+        if color != 0:
+            self.text_color_picker.setStyleSheet(f'QPushButton {{background-color: {color.name()};}}')
+            self.graphicsView.setTextColor(color)
+
+    def getBrushColor(self):
+        color = self.openColorPickerDialog()
+        self.brush_color_picker.setStyleSheet(f'QPushButton {{background-color: {color.name()};}}')
+
+    def openColorPickerDialog(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            print(color.name())
+            return color
+        return 0
+
 
     def setRotationAngle(self, value):
         self.graphicsView.setRotationAngle(value)

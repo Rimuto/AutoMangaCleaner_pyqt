@@ -62,6 +62,9 @@ class WorkingArea(QWidget):
     def setTextFont(self, font):
         self.view.setTextItemFont(font)
 
+    def setTextColor(self, color):
+        self.view.setFontColor(color)
+
     def setTextFontSize(self, value):
         self.view.setFontSize(value)
 
