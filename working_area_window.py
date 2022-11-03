@@ -53,6 +53,9 @@ class WorkingArea(QWidget):
     def setLineHeight(self, value):
         self.view.setLineHeight(value)
 
+    def setDrawingMode(self, mode):
+        self.view.setDrawingMode(mode)
+
     def addImage(self, x, y, image, tag):
         self.view.addImage(x, y, image, tag)
 
