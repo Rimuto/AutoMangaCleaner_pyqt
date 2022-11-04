@@ -145,6 +145,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(10)
         self.font_size_spn.setFont(font)
+        self.font_size_spn.setRange(1, 250)
+        self.font_size_spn.setValue(10)
         self.font_size_spn.setObjectName("font_size_spn")
         self.gridLayout_2.addWidget(self.font_size_spn, 1, 1, 1, 1)
         self.brush_size_lbl = QtWidgets.QLabel(self.controls)
