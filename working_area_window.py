@@ -50,6 +50,9 @@ class WorkingArea(QWidget):
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
 
+    def setBrushColor(self, color):
+        self.view.setBrushColor(color)
+
     def setLineHeight(self, value):
         self.view.setLineHeight(value)
 

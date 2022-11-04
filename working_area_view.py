@@ -100,8 +100,13 @@ class QDMGraphicsView(QGraphicsView):
             self.brushCursor.setZValue(-1)
         self.brushCursor.setAcceptedMouseButtons(Qt.NoButton)
 
+
+
     def setBrushColor(self, color):
-        pass
+        self.brushColor = color
+        self.brush_line_pen = QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+        self.hideBrushCursor()
+        self.initBrushCursor()
 
     def addText(self):
         self.grScene.addText()

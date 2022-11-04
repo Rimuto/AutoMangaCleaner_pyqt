@@ -304,8 +304,8 @@ class Ui_MainWindow(object):
         self.font_size_spn.valueChanged.connect(self.setFontSize)
         self.height_spn.valueChanged.connect(self.setLineHeight)
         self.angle_spn.valueChanged.connect(self.setRotationAngle)
-        self.text_color_picker.clicked.connect(self.getFontColor)
-        self.brush_color_picker.clicked.connect(self.getBrushColor)
+        self.text_color_picker.clicked.connect(self.setFontColor)
+        self.brush_color_picker.clicked.connect(self.setBrushColor)
         self.drawing_mode_chk.clicked.connect(self.setDrawingMode)
 
     def retranslateUi(self, MainWindow):
@@ -335,22 +335,24 @@ class Ui_MainWindow(object):
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
 
+
     def setDrawingMode(self):
         if self.drawing_mode_chk.checkState() == Qt.Checked:
             self.graphicsView.setDrawingMode(True)
         elif self.drawing_mode_chk.checkState() == Qt.Unchecked:
             self.graphicsView.setDrawingMode(False)
 
-    def getFontColor(self):
+    def setFontColor(self):
         color = self.openColorPickerDialog()
         if color != 0:
             self.text_color_picker.setStyleSheet(f'QPushButton {{background-color: {color.name()};}}')
             self.graphicsView.setTextColor(color)
 
-    def getBrushColor(self):
+    def setBrushColor(self):
         color = self.openColorPickerDialog()
         if color != 0:
             self.brush_color_picker.setStyleSheet(f'QPushButton {{background-color: {color.name()};}}')
+            self.graphicsView.setBrushColor(color)
 
     def openColorPickerDialog(self):
         color = QColorDialog.getColor()
