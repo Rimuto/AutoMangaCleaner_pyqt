@@ -71,6 +71,8 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.height_spn.setFont(font)
         self.height_spn.setObjectName("height_spn")
+        self.height_spn.setRange(1, 100)
+        self.height_spn.setValue(1)
         self.gridLayout_2.addWidget(self.height_spn, 1, 3, 1, 1)
         self.alig_right_btn = QtWidgets.QPushButton(self.controls)
         font = QtGui.QFont()
