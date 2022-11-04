@@ -307,6 +307,7 @@ class Ui_MainWindow(object):
         self.text_color_picker.clicked.connect(self.setFontColor)
         self.brush_color_picker.clicked.connect(self.setBrushColor)
         self.drawing_mode_chk.clicked.connect(self.setDrawingMode)
+        self.brush_size_spn.valueChanged.connect(self.setBrushSize)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -347,6 +348,9 @@ class Ui_MainWindow(object):
         if color != 0:
             self.text_color_picker.setStyleSheet(f'QPushButton {{background-color: {color.name()};}}')
             self.graphicsView.setTextColor(color)
+
+    def setBrushSize(self, value):
+        self.graphicsView.setBrushSize(value)
 
     def setBrushColor(self):
         color = self.openColorPickerDialog()
