@@ -169,6 +169,8 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.brush_size_spn.setFont(font)
         self.brush_size_spn.setObjectName("brush_size_spn")
+        self.brush_size_spn.setRange(1, 1500)
+        self.brush_size_spn.setValue(10)
         self.gridLayout_2.addWidget(self.brush_size_spn, 1, 11, 1, 1)
         self.drawing_mode_chk = QtWidgets.QCheckBox(self.controls)
         font = QtGui.QFont()
