@@ -315,8 +315,21 @@ class QDMGraphicsView(QGraphicsView):
                 item.item.setFont(font)
             item.updateBoundingRect()
 
-    def makeItallic(self):
-        pass
+    def makeItalic(self):
+        for item in self.grScene.selectedItems():
+            t = item.item.textCursor()
+            if len(t.selectedText()) > 0:
+                format = t.charFormat()
+            else:
+                t.select(QTextCursor.Document)
+                format = t.charFormat()
+
+            if format.fontItalic():
+                format.setFontItalic(False)
+            else:
+                format.setFontItalic(True)
+            t.setCharFormat(format)
+            item.updateBoundingRect()
 
     def makeUnderline(self):
         pass

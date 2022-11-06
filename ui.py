@@ -366,6 +366,7 @@ class Ui_MainWindow(object):
         self.drawing_mode_chk.clicked.connect(self.setDrawingMode)
         self.brush_size_spn.valueChanged.connect(self.setBrushSize)
         self.bold_btn.clicked.connect(self.makeBold)
+        self.italic_btn.clicked.connect(self.makeItalic)
         # added
 
     def retranslateUi(self, MainWindow):
@@ -394,6 +395,9 @@ class Ui_MainWindow(object):
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    def makeItalic(self):
+        self.graphicsView.makeItalic()
 
     def makeBold(self):
         self.graphicsView.makeBold()

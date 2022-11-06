@@ -50,6 +50,9 @@ class WorkingArea(QWidget):
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
 
+    def makeItalic(self):
+        self.view.makeItalic()
+
     def makeBold(self):
         self.view.makeBold()
 
