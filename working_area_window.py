@@ -50,6 +50,18 @@ class WorkingArea(QWidget):
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
 
+    def textHorizontalAlignJustify(self):
+        self.view.textHorizontalAlignJustify()
+
+    def textHorizontalAlignCenter(self):
+        self.view.textHorizontalAlignCenter()
+
+    def textHorizontalAlignRight(self):
+        self.view.textHorizontalAlignRight()
+
+    def textHorizontalAlignLeft(self):
+        self.view.textHorizontalAlignLeft()
+
     def makeUnderline(self):
         self.view.makeUnderline()
 

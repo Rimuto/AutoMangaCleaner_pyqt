@@ -296,6 +296,25 @@ class QDMGraphicsView(QGraphicsView):
     def delImage(self, tag):
         self.grScene.delImage(tag)
 
+    def setTextHorizontalAlignment(self, alignment):
+        for item in self.grScene.selectedItems():
+            option = item.item.document().defaultTextOption()
+            option.setAlignment(alignment)
+            item.item.document().setDefaultTextOption(option)
+            item.item.setTextWidth(item.boundingRect().width())
+
+    def textHorizontalAlignLeft(self):
+        self.setTextHorizontalAlignment(Qt.AlignLeft)
+
+    def textHorizontalAlignRight(self):
+        self.setTextHorizontalAlignment(Qt.AlignRight)
+
+    def textHorizontalAlignCenter(self):
+        self.setTextHorizontalAlignment(Qt.AlignCenter)
+
+    def textHorizontalAlignJustify(self):
+        self.setTextHorizontalAlignment(Qt.AlignJustify)
+
     def makeBold(self):
         for item in self.grScene.selectedItems():
             t = item.item.textCursor()

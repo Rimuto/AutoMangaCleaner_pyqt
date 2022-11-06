@@ -56,9 +56,11 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.setTransformOriginPoint(center)
 
     def updateBoundingRect(self):
+        self.item.setTextWidth(-1)
         self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
         self.setRect(self.item.boundingRect())
         self.setCenter(self.item.transformOriginPoint())
+
 
     def mouseDoubleClickEvent(self, event):
         self.item.mouseDoubleClickEvent(event)
