@@ -346,49 +346,51 @@ class QDMGraphicsView(QGraphicsView):
 
 
     def setFontColor(self, color):
+        def do(t):
+            format = t.charFormat()
+            format.setForeground(color)
+            t.setCharFormat(format)
+
         for item in self.grScene.selectedItems():
-            #add type check
             t = item.item.textCursor()
             if len(t.selectedText()) > 0:
-                format = t.charFormat()
-                format.setForeground(color)
-                t.setCharFormat(format)
+                do(t)
             else:
-                item.item.setDefaultTextColor(color)
-                #add here smth to change color of all item
-                # pointSize = item.item.font().pointSize()
-                # font.setPointSize(pointSize)
-                # item.item.setFont(font)
+                t.select(QTextCursor.Document)
+                do(t)
             item.updateBoundingRect()
 
     def setTextItemFont(self, font):
+        def do(t):
+            format = t.charFormat()
+            pointSize = format.font().pointSize()
+            font.setPointSize(pointSize)
+            format.setFont(font)
+            t.setCharFormat(format)
+
         for item in self.grScene.selectedItems():
-            #add type check
             t = item.item.textCursor()
             if len(t.selectedText()) > 0:
-                format = t.charFormat()
-                pointSize = format.font().pointSize()
-                font.setPointSize(pointSize)
-                format.setFont(font)
-                t.setCharFormat(format)
+                do(t)
             else:
-                pointSize = item.item.font().pointSize()
-                font.setPointSize(pointSize)
-                item.item.setFont(font)
+                t.select(QTextCursor.Document)
+                do(t)
             item.updateBoundingRect()
 
     def setFontSize(self, value):
+        def do(t):
+            format = t.charFormat()
+            format.setFontPointSize(value)
+            t.setCharFormat(format)
+
         for item in self.grScene.selectedItems():
             # add type check
             t = item.item.textCursor()
             if len(t.selectedText()) > 0:
-                format = t.charFormat()
-                format.setFontPointSize(value)
-                t.setCharFormat(format)
+                do(t)
             else:
-                font = item.item.font()
-                font.setPointSize(value)
-                item.item.setFont(font)
+                t.select(QTextCursor.Document)
+                do(t)
             item.updateBoundingRect()
 
     def setLineHeight(self, value):
