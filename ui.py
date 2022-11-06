@@ -367,6 +367,7 @@ class Ui_MainWindow(object):
         self.brush_size_spn.valueChanged.connect(self.setBrushSize)
         self.bold_btn.clicked.connect(self.makeBold)
         self.italic_btn.clicked.connect(self.makeItalic)
+        self.underline_btn.clicked.connect(self.makeUnderline)
         # added
 
     def retranslateUi(self, MainWindow):
@@ -395,6 +396,9 @@ class Ui_MainWindow(object):
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    def makeUnderline(self):
+        self.graphicsView.makeUnderline()
 
     def makeItalic(self):
         self.graphicsView.makeItalic()

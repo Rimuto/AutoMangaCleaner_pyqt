@@ -329,7 +329,20 @@ class QDMGraphicsView(QGraphicsView):
             item.updateBoundingRect()
 
     def makeUnderline(self):
-        pass
+        for item in self.grScene.selectedItems():
+            t = item.item.textCursor()
+            if len(t.selectedText()) > 0:
+                format = t.charFormat()
+            else:
+                t.select(QTextCursor.Document)
+                format = t.charFormat()
+
+            if format.fontUnderline():
+                format.setFontUnderline(False)
+            else:
+                format.setFontUnderline(True)
+            t.setCharFormat(format)
+            item.updateBoundingRect()
 
 
     def setFontColor(self, color):
