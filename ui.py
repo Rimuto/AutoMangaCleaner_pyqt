@@ -365,6 +365,8 @@ class Ui_MainWindow(object):
         self.brush_color_picker.clicked.connect(self.setBrushColor)
         self.drawing_mode_chk.clicked.connect(self.setDrawingMode)
         self.brush_size_spn.valueChanged.connect(self.setBrushSize)
+        self.bold_btn.clicked.connect(self.makeBold)
+        # added
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -393,6 +395,8 @@ class Ui_MainWindow(object):
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
 
+    def makeBold(self):
+        self.graphicsView.makeBold()
 
     def setDrawingMode(self):
         if self.drawing_mode_chk.checkState() == Qt.Checked:

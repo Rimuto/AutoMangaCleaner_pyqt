@@ -296,6 +296,32 @@ class QDMGraphicsView(QGraphicsView):
     def delImage(self, tag):
         self.grScene.delImage(tag)
 
+    def makeBold(self):
+        for item in self.grScene.selectedItems():
+            t = item.item.textCursor()
+            if len(t.selectedText()) > 0:
+                format = t.charFormat()
+                if format.fontWeight() == QFont.Normal:
+                    format.setFontWeight(QFont.Bold)
+                elif format.fontWeight() == QFont.Bold:
+                    format.setFontWeight(QFont.Normal)
+                t.setCharFormat(format)
+            else:
+                font = item.item.font()
+                if font.bold():
+                    font.setBold(False)
+                else:
+                    font.setBold(True)
+                item.item.setFont(font)
+            item.updateBoundingRect()
+
+    def makeItallic(self):
+        pass
+
+    def makeUnderline(self):
+        pass
+
+
     def setFontColor(self, color):
         for item in self.grScene.selectedItems():
             #add type check

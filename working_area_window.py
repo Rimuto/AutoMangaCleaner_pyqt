@@ -50,6 +50,9 @@ class WorkingArea(QWidget):
     def mouseMoveEvent(self, event):
         self.view.mouseMoveEvent()
 
+    def makeBold(self):
+        self.view.makeBold()
+
     def setBrushSize(self, value):
         self.view.setBrushSize(value)
 
