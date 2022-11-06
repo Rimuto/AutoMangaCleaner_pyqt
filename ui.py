@@ -368,6 +368,10 @@ class Ui_MainWindow(object):
         self.bold_btn.clicked.connect(self.makeBold)
         self.italic_btn.clicked.connect(self.makeItalic)
         self.underline_btn.clicked.connect(self.makeUnderline)
+        self.alig_left_btn.clicked.connect(self.textHorizontalAlignLeft)
+        self.alig_right_btn.clicked.connect(self.textHorizontalAlignRight)
+        self.alig_center_btn.clicked.connect(self.textHorizontalAlignCenter)
+        self.alig_justify_btn.clicked.connect(self.textHorizontalAlignJustify)
         # added
 
     def retranslateUi(self, MainWindow):
@@ -396,6 +400,18 @@ class Ui_MainWindow(object):
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    def textHorizontalAlignJustify(self):
+        self.graphicsView.textHorizontalAlignJustify()
+
+    def textHorizontalAlignCenter(self):
+        self.graphicsView.textHorizontalAlignCenter()
+
+    def textHorizontalAlignRight(self):
+        self.graphicsView.textHorizontalAlignRight()
+
+    def textHorizontalAlignLeft(self):
+        self.graphicsView.textHorizontalAlignLeft()
 
     def makeUnderline(self):
         self.graphicsView.makeUnderline()
