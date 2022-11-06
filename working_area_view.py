@@ -301,18 +301,15 @@ class QDMGraphicsView(QGraphicsView):
             t = item.item.textCursor()
             if len(t.selectedText()) > 0:
                 format = t.charFormat()
-                if format.fontWeight() == QFont.Normal:
-                    format.setFontWeight(QFont.Bold)
-                elif format.fontWeight() == QFont.Bold:
-                    format.setFontWeight(QFont.Normal)
-                t.setCharFormat(format)
             else:
-                font = item.item.font()
-                if font.bold():
-                    font.setBold(False)
-                else:
-                    font.setBold(True)
-                item.item.setFont(font)
+                t.select(QTextCursor.Document)
+                format = t.charFormat()
+
+            if format.fontWeight() == QFont.Normal:
+                format.setFontWeight(QFont.Bold)
+            elif format.fontWeight() == QFont.Bold:
+                format.setFontWeight(QFont.Normal)
+            t.setCharFormat(format)
             item.updateBoundingRect()
 
     def makeItalic(self):
