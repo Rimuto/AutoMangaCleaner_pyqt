@@ -48,6 +48,13 @@ class QDMTextItem(QGraphicsTextItem):
         super().keyPressEvent(event)
         self.parentItem().updateBoundingRect()
 
+    def hoverMoveEvent(self, moveEvent):
+        super().hoverMoveEvent(moveEvent)
+
+    def hoverLeaveEvent(self, moveEvent):
+        self.setCursor(Qt.ArrowCursor)
+        super().hoverLeaveEvent(moveEvent)
+
     # def mousePressEvent(self, event):
     #     if (event.button() == Qt.LeftButton and
     #             self.textInteractionFlags() != Qt.TextEditorInteraction):

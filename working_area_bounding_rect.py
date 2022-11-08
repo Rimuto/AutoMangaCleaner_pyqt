@@ -70,6 +70,7 @@ class QDMBoundingRect(QGraphicsRectItem):
         """
         Returns the resize handle below the given point.
         """
+        print(point)
         for k, v, in self.handles.items():
             if v.contains(point):
                 return k
@@ -120,8 +121,8 @@ class QDMBoundingRect(QGraphicsRectItem):
         #painter.drawRect(self.rect())
 
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(self.brush)
-        painter.setPen(self.pen)
+        painter.setBrush(Qt.NoBrush)#self.brush
+        painter.setPen(Qt.NoPen)#self.pen
         for handle, rect in self.handles.items():
             if self.handleSelected is None or handle == self.handleSelected:
                 if self.hide_handles == False:
@@ -214,9 +215,9 @@ class QDMBoundingRect(QGraphicsRectItem):
         #self.handles[self.handleTopMiddle] = QRectF(b.center().x() - s / 2, b.top(), s, s)
         #self.handles[self.handleTopRight] = QRectF(b.right() - s, b.top(), s, s)
         #self.handles[self.handleMiddleLeft] = QRectF(b.left(), b.center().y() - s / 2, s, s)
-        self.handles[self.handleMiddleRight] = QRectF(b.right() - s, b.center().y() - s / 2, s, s)
+        self.handles[self.handleMiddleRight] = QRectF(b.right() - s, b.top() + s, s, self.rect().height() - s)
         #self.handles[self.handleBottomLeft] = QRectF(b.left(), b.bottom() - s, s, s)
-        self.handles[self.handleBottomMiddle] = QRectF(b.center().x() - s / 2, b.bottom() - s, s, s)
+        self.handles[self.handleBottomMiddle] = QRectF(b.left() + s, b.bottom() - s, self.rect().width() - s, s)
         self.handles[self.handleBottomRight] = QRectF(b.right() - s, b.bottom() - s, s, s)
 
     def interactiveResize(self, mousePos):
@@ -236,12 +237,11 @@ class QDMBoundingRect(QGraphicsRectItem):
             toX = fromX + mousePos.x() - self.mousePressPos.x()
             diff.setX(toX - fromX)
             boundingRect.setRight(toX)
-            if boundingRect.width() < self.minimalRect.width():
-                return
-            rect.setRight(boundingRect.right() - offset)
-            self.setRect(rect)
+            if boundingRect.width() > self.minimalRect.width():
+                rect.setRight(boundingRect.right() - offset)
+                self.setRect(rect)
 
-        elif self.handleSelected == self.handleBottomMiddle:
+        if self.handleSelected == self.handleBottomMiddle:
 
             fromY = self.mousePressRect.bottom()
             toY = fromY + mousePos.y() - self.mousePressPos.y()
@@ -250,7 +250,7 @@ class QDMBoundingRect(QGraphicsRectItem):
             rect.setBottom(boundingRect.bottom() - offset)
             self.setRect(rect)
 
-        elif self.handleSelected == self.handleBottomRight:
+        if self.handleSelected == self.handleBottomRight:
 
             fromX = self.mousePressRect.right()
             fromY = self.mousePressRect.bottom()
@@ -260,11 +260,16 @@ class QDMBoundingRect(QGraphicsRectItem):
             diff.setY(toY - fromY)
             boundingRect.setRight(toX)
             boundingRect.setBottom(toY)
-            if boundingRect.width() < self.minimalRect.width():
-                return
-            rect.setRight(boundingRect.right() - offset)
-            rect.setBottom(boundingRect.bottom() - offset)
-            self.setRect(rect)
+            if boundingRect.width() > self.minimalRect.width():
+                rect.setRight(boundingRect.right() - offset)
+                rect.setBottom(boundingRect.bottom() - offset)
+                self.setRect(rect)
+            if boundingRect.width() < self.minimalRect.width() and boundingRect.height() > self.minimalRect.height():
+                rect.setBottom(boundingRect.bottom() - offset)
+                self.setRect(rect)
+            if boundingRect.width() > self.minimalRect.width() and boundingRect.height() < self.minimalRect.height():
+                rect.setRight(boundingRect.right() - offset)
+                self.setRect(rect)
         self.updateBoundingRect()
         self.updateHandlesPos()
 
