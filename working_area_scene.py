@@ -39,6 +39,14 @@ class QDMWorkingAreaScene(QGraphicsScene):
         self.addItem(self.textItems[-1])
         # self.drawingGroup.addToGroup(self.textItems[-1])
 
+    def addIntaractiveImage(self, image):
+        image = QDMBoundingRect(image)
+        rect = image.rect()
+        rect.setWidth(10)
+        rect.setHeight(10)
+        image.setMinimalRect(rect)
+        self.addItem(image)
+
     def setImage(self, pixmap=None):
         if pixmap and not pixmap.isNull():
             self.empty = False

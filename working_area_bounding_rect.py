@@ -35,6 +35,7 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.setFiltersChildEvents(True)
         #self.setZValue(100)
         self.item = item
+
         self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
         self.item.setParentItem(self)
         #self.item.setFlags(self.ItemIsSelectable)
@@ -65,6 +66,9 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
         self.updateHandlesPos()
         self.hideRect()
+
+    def setMinimalRect(self, rect):
+        self.minimalRect = rect
 
     def handleAt(self, point):
         """
@@ -116,9 +120,9 @@ class QDMBoundingRect(QGraphicsRectItem):
         elif not self.isSelected():
             self.hideRect()
 
-        #painter.setBrush(QBrush(QColor(255, 0, 0, 100)))
-        #painter.setPen(QPen(QColor(0, 0, 0), 1.0, Qt.SolidLine))
-        #painter.drawRect(self.rect())
+        # if isinstance(self.item, QGraphicsPixmapItem):
+        #     painter.drawPixmap(self.x(), self.y(), self.rect().width(), self.rect().height(),
+        #                   self.item.pixmap().scaled(self.rect().width(), self.rect().height(), transformMode=QtCore.Qt.SmoothTransformation))
 
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(Qt.NoBrush)#self.brush
@@ -136,7 +140,9 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.setTransformOriginPoint(center)
 
     def updateBoundingRect(self):
-        self.item.setTextWidth(self.rect().width())
+        if isinstance(self.item, QDMTextItem):
+            self.item.setTextWidth(self.rect().width())
+
         self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
         if self.item.boundingRect().height() > self.rect().height():
             self.setRect(self.item.boundingRect())
@@ -148,10 +154,9 @@ class QDMBoundingRect(QGraphicsRectItem):
 
     def sceneEventFilter(self, item, event):
         if item == self.handle:
-            if (event.type() == event.GraphicsSceneMousePress
-                and event.button() == Qt.LeftButton):
-                    self._startPos = event.pos()
-                    return True
+            if event.type() == event.GraphicsSceneMousePress and event.button() == Qt.LeftButton:
+                self._startPos = event.pos()
+                return True
             elif (event.type() == event.GraphicsSceneMouseMove
                 and self._startPos is not None):
                     centerPos = self.center.scenePos()

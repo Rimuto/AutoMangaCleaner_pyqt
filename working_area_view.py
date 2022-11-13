@@ -429,3 +429,11 @@ class QDMGraphicsView(QGraphicsView):
     def setRotationAngle(self, value):
         for item in self.grScene.selectedItems():
             item.setRotation(value)
+
+    def make_image(self):
+        self.grScene.clearSelection()
+        image = QImage(self.grScene.sceneRect().size().toSize(), QImage.Format_ARGB32)
+        image.fill(Qt.transparent)
+        painter = QPainter(image)
+        self.grScene.render(painter)
+        return image

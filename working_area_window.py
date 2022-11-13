@@ -117,3 +117,6 @@ class WorkingArea(QWidget):
 
         #tagItem = QDMTextItem("myText")  # create a NodeTag item
         self.view.addText()
+
+    def make_image(self):
+        return self.view.make_image()

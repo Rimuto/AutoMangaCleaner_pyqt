@@ -372,6 +372,7 @@ class Ui_MainWindow(object):
         self.alig_right_btn.clicked.connect(self.textHorizontalAlignRight)
         self.alig_center_btn.clicked.connect(self.textHorizontalAlignCenter)
         self.alig_justify_btn.clicked.connect(self.textHorizontalAlignJustify)
+        self.actionSave.triggered.connect(self.save)
         # added
 
     def retranslateUi(self, MainWindow):
@@ -400,6 +401,17 @@ class Ui_MainWindow(object):
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    def save(self):
+        self.make_image()
+        file = str(QFileDialog.getExistingDirectory())
+        if file and len(self.contexts) != 0:
+            for i in self.contexts:
+                self.contexts[i]["image"].save(file + "/" + self.contexts[i]["name"] + "." + self.contexts[i]["ext"])
+
+    def make_image(self):
+        image = self.graphicsView.make_image()
+        self.contexts[self.current]["image"] = image
 
     def textHorizontalAlignJustify(self):
         self.graphicsView.textHorizontalAlignJustify()
@@ -450,7 +462,6 @@ class Ui_MainWindow(object):
             return color
         return 0
 
-
     def setRotationAngle(self, value):
         self.graphicsView.setRotationAngle(value)
 
@@ -483,6 +494,7 @@ class Ui_MainWindow(object):
 
     def shift(self, current):
         if len(self.contexts) > 0:
+            self.make_image()
             self.listWidget.clear()
             if current > len(self.contexts) - 1:
                 self.contexts[self.current]["scene"] = self.graphicsView.getScene()
@@ -562,9 +574,9 @@ class Ui_MainWindow(object):
                     img[y: y + h, x: x + w] = cleaned
                 name, ext = os.path.splitext(name)
                 workingAreaScene = self.createWorkingAreaScene(img)
-                self.contexts[i] = {"scene": workingAreaScene, "cleaned": cl, "name": name, "ext": ext }
-        self.listWidget.setList(self.contexts[0]["cleaned"])
-        self.graphicsView.setScene(self.contexts[0]["scene"])
+                self.contexts[i] = {"scene": workingAreaScene, "cleaned": cl, "name": name, "ext": ext, "image": self.convertToQImage(img)}
+            self.listWidget.setList(self.contexts[0]["cleaned"])
+            self.graphicsView.setScene(self.contexts[0]["scene"])
         # for index in range(self.model.rowCount()):
         #     item = self.model.item(index)
         #     print(item.data())
