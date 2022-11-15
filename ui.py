@@ -153,7 +153,16 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.fontComboBox.setFont(font)
         self.fontComboBox.setObjectName("fontComboBox")
-        self.gridLayout_3.addWidget(self.fontComboBox, 0, 0, 1, 4)
+        self.gridLayout_3.addWidget(self.fontComboBox, 0, 0, 1, 3)
+        self.applyTextSettings = QtWidgets.QPushButton(self.frame_4)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setUnderline(True)
+        font.setWeight(75)
+        self.applyTextSettings.setFont(font)
+        self.applyTextSettings.setObjectName("applyTextSettings")
+        self.gridLayout_3.addWidget(self.applyTextSettings, 0, 3, 1, 1)
         self.horizontalLayout_4.addWidget(self.frame_4)
         self.frame_5 = QtWidgets.QFrame(self.controls)
         self.frame_5.setMinimumSize(QtCore.QSize(411, 131))
@@ -217,20 +226,32 @@ class Ui_MainWindow(object):
         self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_6.setObjectName("frame_6")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame_6)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.frame_6)
+        self.gridLayout_5.setObjectName("gridLayout_5")
         self.add_text_btn = QtWidgets.QPushButton(self.frame_6)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.add_text_btn.setFont(font)
         self.add_text_btn.setObjectName("add_text_btn")
-        self.horizontalLayout_5.addWidget(self.add_text_btn)
+        self.gridLayout_5.addWidget(self.add_text_btn)
         self.delete_text_btn = QtWidgets.QPushButton(self.frame_6)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.delete_text_btn.setFont(font)
         self.delete_text_btn.setObjectName("delete_text_btn")
-        self.horizontalLayout_5.addWidget(self.delete_text_btn)
+        self.gridLayout_5.addWidget(self.delete_text_btn, 0, 1, 1, 1)
+        self.toTheBack = QtWidgets.QPushButton(self.frame_6)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.toTheBack.setFont(font)
+        self.toTheBack.setObjectName("toTheBack")
+        self.gridLayout_5.addWidget(self.toTheBack, 1, 1, 1, 1)
+        self.toTheFront = QtWidgets.QPushButton(self.frame_6)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.toTheFront.setFont(font)
+        self.toTheFront.setObjectName("toTheFront")
+        self.gridLayout_5.addWidget(self.toTheFront, 1, 0, 1, 1)
         self.horizontalLayout_4.addWidget(self.frame_6)
         self.frame_7 = QtWidgets.QFrame(self.controls)
         self.frame_7.setMinimumSize(QtCore.QSize(161, 131))
@@ -373,6 +394,7 @@ class Ui_MainWindow(object):
         self.alig_center_btn.clicked.connect(self.textHorizontalAlignCenter)
         self.alig_justify_btn.clicked.connect(self.textHorizontalAlignJustify)
         self.actionSave.triggered.connect(self.save)
+
         # added
 
     def retranslateUi(self, MainWindow):
@@ -385,6 +407,7 @@ class Ui_MainWindow(object):
         self.height_lbl.setText(_translate("MainWindow", "Height"))
         self.font_color_lbl.setText(_translate("MainWindow", "Color"))
         self.angle_lbl.setText(_translate("MainWindow", "Angle"))
+        self.applyTextSettings.setText(_translate("MainWindow", "A"))
         self.bold_btn.setText(_translate("MainWindow", "Bold"))
         self.italic_btn.setText(_translate("MainWindow", "Italic"))
         self.underline_btn.setText(_translate("MainWindow", "Underline"))
@@ -394,6 +417,8 @@ class Ui_MainWindow(object):
         self.alig_justify_btn.setText(_translate("MainWindow", "Justify"))
         self.add_text_btn.setText(_translate("MainWindow", "Add"))
         self.delete_text_btn.setText(_translate("MainWindow", "Delete"))
+        self.toTheBack.setText(_translate("MainWindow", "↓"))
+        self.toTheFront.setText(_translate("MainWindow", "↑"))
         self.brush_size_lbl.setText(_translate("MainWindow", "Size"))
         self.drawing_mode_chk.setText(_translate("MainWindow", "Drawing Mode"))
         self.brush_color_lbl.setText(_translate("MainWindow", "Color"))
@@ -501,15 +526,18 @@ class Ui_MainWindow(object):
                 self.graphicsView.setScene(self.contexts[0]["scene"])
                 self.listWidget.setList(self.contexts[0]["cleaned"])
                 self.current = 0
+                self.label.setText(str(self.current + 1) + "/" + str(len(self.contexts)))
             elif current < 0:
                 self.contexts[self.current]["scene"] = self.graphicsView.getScene()
                 self.graphicsView.setScene(self.contexts[len(self.contexts) - 1]["scene"])
                 self.listWidget.setList(self.contexts[len(self.contexts) - 1]["cleaned"])
                 self.current = len(self.contexts) - 1
+                self.label.setText(str(self.current + 1) + "/" + str(len(self.contexts)))
             else:
                 self.graphicsView.setScene(self.contexts[current]["scene"])
                 self.listWidget.setList(self.contexts[current]["cleaned"])
                 self.current = current
+                self.label.setText(str(self.current + 1) + "/" + str(len(self.contexts)))
 
     def shiftContext(self, mode):
         if mode == "forward":
@@ -577,6 +605,8 @@ class Ui_MainWindow(object):
                 self.contexts[i] = {"scene": workingAreaScene, "cleaned": cl, "name": name, "ext": ext, "image": self.convertToQImage(img)}
             self.listWidget.setList(self.contexts[0]["cleaned"])
             self.graphicsView.setScene(self.contexts[0]["scene"])
+        self.label.setText("1/" + str(len(self.contexts)))
+
         # for index in range(self.model.rowCount()):
         #     item = self.model.item(index)
         #     print(item.data())
