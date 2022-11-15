@@ -92,7 +92,7 @@ class QDMGraphicsView(QGraphicsView):
         #self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
     def initBrushCursor(self):
-        self.brushCursor = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
+        self.brushCursor = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.black), self.brushColor)
         self.brushCursor.setFlag(QGraphicsItem.ItemIsMovable)
         if self.drawingMode:
             self.brushCursor.setZValue(100)
