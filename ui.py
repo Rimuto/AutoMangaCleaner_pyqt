@@ -365,6 +365,8 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # added
+        self.text_color_picker.setStyleSheet('QPushButton {background-color: #000000;}')
+        self.brush_color_picker.setStyleSheet('QPushButton {background-color: #000000;}')
         self.height_spn.setRange(1, 100)
         self.height_spn.setValue(1)
         self.font_size_spn.setRange(1, 250)
@@ -394,7 +396,7 @@ class Ui_MainWindow(object):
         self.alig_center_btn.clicked.connect(self.textHorizontalAlignCenter)
         self.alig_justify_btn.clicked.connect(self.textHorizontalAlignJustify)
         self.actionSave.triggered.connect(self.save)
-
+        self.applyTextSettings.clicked.connect(self.setTextSettings)
         # added
 
     def retranslateUi(self, MainWindow):
@@ -426,6 +428,18 @@ class Ui_MainWindow(object):
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
         self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    def setTextSettings(self):
+        self.graphicsView.setLineHeight(self.height_spn.value())
+
+        self.graphicsView.setTextFontSize(self.font_size_spn.value())
+
+        font = self.fontComboBox.currentFont()
+        self.graphicsView.setTextFont(font)
+
+        color = self.text_color_picker.palette().window().color()
+        self.graphicsView.setTextColor(color)
+
 
     def save(self):
         self.make_image()
