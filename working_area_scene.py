@@ -37,6 +37,7 @@ class QDMWorkingAreaScene(QGraphicsScene):
     def addText(self, text = "Sample Text"):
         self.textItems.append(QDMBoundingRect(QDMTextItem("myText")))
         self.addItem(self.textItems[-1])
+        self.textItems[-1].setZValue(100)
         # self.drawingGroup.addToGroup(self.textItems[-1])
 
     def addIntaractiveImage(self, image):

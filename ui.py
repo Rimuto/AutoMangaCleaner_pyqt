@@ -23,7 +23,8 @@ nets = detect.load_model(CFG, Weights)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("AutoMangaCleaner")
+        MainWindow.setWindowIcon(QtGui.QIcon('resources/favicon.ico'))
         MainWindow.resize(1120, 700)
         MainWindow.setMinimumSize(QtCore.QSize(1120, 700))
 
@@ -240,18 +241,7 @@ class Ui_MainWindow(object):
         self.delete_text_btn.setFont(font)
         self.delete_text_btn.setObjectName("delete_text_btn")
         self.gridLayout_5.addWidget(self.delete_text_btn, 0, 1, 1, 1)
-        self.toTheBack = QtWidgets.QPushButton(self.frame_6)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.toTheBack.setFont(font)
-        self.toTheBack.setObjectName("toTheBack")
-        self.gridLayout_5.addWidget(self.toTheBack, 1, 1, 1, 1)
-        self.toTheFront = QtWidgets.QPushButton(self.frame_6)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.toTheFront.setFont(font)
-        self.toTheFront.setObjectName("toTheFront")
-        self.gridLayout_5.addWidget(self.toTheFront, 1, 0, 1, 1)
+
         self.horizontalLayout_4.addWidget(self.frame_6)
         self.frame_7 = QtWidgets.QFrame(self.controls)
         self.frame_7.setMinimumSize(QtCore.QSize(161, 131))
@@ -352,12 +342,12 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.actionOpen_image = QtWidgets.QAction(MainWindow)
         self.actionOpen_image.setObjectName("actionOpen_image")
-        self.actionAdd_new_font = QtWidgets.QAction(MainWindow)
-        self.actionAdd_new_font.setObjectName("actionAdd_new_font")
+        #self.actionAdd_new_font = QtWidgets.QAction(MainWindow)
+        #self.actionAdd_new_font.setObjectName("actionAdd_new_font")
         self.actionSave = QtWidgets.QAction(MainWindow)
         self.actionSave.setObjectName("actionSave")
         self.menuFile.addAction(self.actionOpen_image)
-        self.menuFile.addAction(self.actionAdd_new_font)
+        #self.menuFile.addAction(self.actionAdd_new_font)
         self.menuFile.addAction(self.actionSave)
         self.menubar.addAction(self.menuFile.menuAction())
 
@@ -419,27 +409,29 @@ class Ui_MainWindow(object):
         self.alig_justify_btn.setText(_translate("MainWindow", "Justify"))
         self.add_text_btn.setText(_translate("MainWindow", "Add"))
         self.delete_text_btn.setText(_translate("MainWindow", "Delete"))
-        self.toTheBack.setText(_translate("MainWindow", "↓"))
-        self.toTheFront.setText(_translate("MainWindow", "↑"))
+        #self.toTheBack.setText(_translate("MainWindow", "↓"))
+        #self.toTheFront.setText(_translate("MainWindow", "↑"))
         self.brush_size_lbl.setText(_translate("MainWindow", "Size"))
         self.drawing_mode_chk.setText(_translate("MainWindow", "Drawing Mode"))
         self.brush_color_lbl.setText(_translate("MainWindow", "Color"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionOpen_image.setText(_translate("MainWindow", "Open image"))
-        self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
+        #self.actionAdd_new_font.setText(_translate("MainWindow", "Add new font"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
+
+    # def toTheFirstLayer(self):
+    #     pass
+    #
+    # def toTheLastLayer(self):
+    #     pass
 
     def setTextSettings(self):
         self.graphicsView.setLineHeight(self.height_spn.value())
-
         self.graphicsView.setTextFontSize(self.font_size_spn.value())
-
         font = self.fontComboBox.currentFont()
         self.graphicsView.setTextFont(font)
-
         color = self.text_color_picker.palette().window().color()
         self.graphicsView.setTextColor(color)
-
 
     def save(self):
         self.make_image()

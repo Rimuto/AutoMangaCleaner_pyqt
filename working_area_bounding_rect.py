@@ -144,8 +144,8 @@ class QDMBoundingRect(QGraphicsRectItem):
             self.item.setTextWidth(self.rect().width())
 
         self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
-        if self.item.boundingRect().height() > self.rect().height():
-            self.setRect(self.item.boundingRect())
+        #if self.item.boundingRect().height() > self.rect().height():
+        self.setRect(self.item.boundingRect())
         self.setCenter(self.rect().center())
         self.updateHandlesPos()
 

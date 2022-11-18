@@ -21,7 +21,7 @@ class WorkingArea(QWidget):
         self.view.fitInView()
         self.view.initBrushCursor()
 
-    def loadImage(self, path="image.jpg"):
+    def loadImage(self, path):
         self.view.setMainImage(QPixmap(path))
 
     def initUI(self):
@@ -41,10 +41,10 @@ class WorkingArea(QWidget):
         gl.setFormat(format)
         self.view.setViewport(gl)
         #self.setWindowTitle("AutoMangaCleaner")
-        self.loadImage()
+        #self.loadImage()
         self.show()
         #self.showMaximized()
-        self.addText()
+        #self.addText()
         #self.view.setFocus()
 
     def mouseMoveEvent(self, event):

@@ -50,7 +50,7 @@ class QDMGraphicsView(QGraphicsView):
         self.photo = QGraphicsPixmapItem()
         self.undoStack = QUndoStack(self)
     #text settings
-        #fonts, color, outline etc.
+        #resources, color, outline etc.
 
     #brush drawing settings
         self.drawingMode = False
@@ -100,6 +100,14 @@ class QDMGraphicsView(QGraphicsView):
             self.brushCursor.setZValue(-1)
         self.brushCursor.setAcceptedMouseButtons(Qt.NoButton)
 
+    # def toTheFirstLayer(self):
+    #     for item in self.grScene.selectedItems():
+    #         item.setZValue(100)
+    #
+    # def toTheLastLayer(self):
+    #     for item in self.grScene.selectedItems():
+    #         item.setZValue(1)
+
     def setBrushSize(self, value):
         self.brushSize = value
         self.brush_line_pen = QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
@@ -139,10 +147,12 @@ class QDMGraphicsView(QGraphicsView):
         self._path = QPainterPath()
         pen = self.brush_line_pen
         self._path_item = self.grScene.addPath(self._path, pen)
+        self._path_item.setZValue(2)
 
     def initialCirclePath(self):
         self.circle_path = QPainterPath()
         self.circle_path_item = self.grScene.addPath(self._path, QPen(Qt.NoPen), self.brushColor)
+        self.circle_path_item.setZValue(2)
 
     def setMainImage(self, pixmapItem):
         self.grScene.setImage(pixmapItem)
