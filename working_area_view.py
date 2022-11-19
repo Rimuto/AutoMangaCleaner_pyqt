@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from working_area_scene import QDMWorkingAreaScene
+import importlib
 """
 PLAN IS:
     (DONE)  PAN & ZOOM
@@ -78,12 +79,13 @@ class QDMGraphicsView(QGraphicsView):
         self.zoom = 10
         self.zoomStep = 1
         self.zoomRange = [0, 20]
-
+        self.clipboard = []
         # if self.drawingMode:
         #     self.brush = self.grScene.addEllipse(0, 0, self.brushSize, self.brushSize, QPen(Qt.NoPen), self.brushColor)
         #     self.brush.setFlag(QGraphicsItem.ItemIsMovable)
         #     self.brush.setAcceptedMouseButtons(Qt.NoButton)
         #     self.brush.setZValue(100)
+        self.custom_mimeType = "application/x-qgraphicsitems"
 
     def initUI(self):
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform)
@@ -225,11 +227,42 @@ class QDMGraphicsView(QGraphicsView):
             self._mousePressed = False
         super(QDMGraphicsView, self).mouseReleaseEvent(event)
 
+    def copy_items(self):
+        self.clipboard = []
+        for item in self.grScene.selectedItems():
+            self.clipboard.append(item)
+
+    def paste_items(self):
+        for item in self.clipboard:
+            t = item.item.textCursor()
+            t.select(QTextCursor.Document)
+            html = item.item.toHtml()
+            newItem = self.grScene.addText("text")
+            newItem.item.setHtml(html)
+            newItem.setRect(item.boundingRect())
+            newItem.updateBoundingRect()
+
+    def is_selected(self):
+        if len(self.grScene.selectedItems()) == 1:
+            for item in self.grScene.selectedItems():
+                #t = item.item.textCursor()
+                #print(item.item.textInteractionFlags())
+                if Qt.TextEditorInteraction == item.item.textInteractionFlags():
+                    return True
+                else:
+                    return False
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_D:
             self.setDrawingMode(False)
         if event.key() == Qt.Key_S:
             self.setDrawingMode(True)
+        if event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
+            if not self.is_selected():
+                self.copy_items()
+        if event.key() == Qt.Key_V and event.modifiers() == Qt.ControlModifier:
+            if not self.is_selected():
+                self.paste_items()
         if event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier:
             self.undoStack.undo()
         elif event.key() == Qt.Key_Y and event.modifiers() == Qt.ControlModifier:
