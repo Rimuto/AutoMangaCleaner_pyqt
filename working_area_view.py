@@ -123,7 +123,8 @@ class QDMGraphicsView(QGraphicsView):
         self.initBrushCursor()
 
     def addText(self):
-        self.grScene.addText()
+        text = self.grScene.addText()
+        text.setPos(self.mapToScene(self.rect().center()))
 
     def setDrawingMode(self, mode):
         if mode:
@@ -406,7 +407,6 @@ class QDMGraphicsView(QGraphicsView):
             t.setCharFormat(format)
             item.updateBoundingRect()
 
-
     def setFontColor(self, color):
         def do(t):
             format = t.charFormat()
@@ -453,6 +453,7 @@ class QDMGraphicsView(QGraphicsView):
             else:
                 t.select(QTextCursor.Document)
                 do(t)
+            #item.item.setTextWidth(-1)
             item.updateBoundingRect()
 
     def setLineHeight(self, value):

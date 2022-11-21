@@ -35,7 +35,7 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.setFiltersChildEvents(True)
         #self.setZValue(100)
         self.item = item
-
+        #self.item.setFontSize(35)
         self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
         self.item.setParentItem(self)
         #self.item.setFlags(self.ItemIsSelectable)
@@ -64,6 +64,7 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
+        self.updateBoundingRect()
         self.updateHandlesPos()
         self.hideRect()
 
@@ -108,7 +109,7 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.hide_handles = True
 
     def showRect(self):
-        self.setPen(QPen(Qt.blue))
+        self.setPen(QPen(Qt.green))
         self.handle.setVisible(True)
         self.hide_handles = False
 
@@ -142,9 +143,7 @@ class QDMBoundingRect(QGraphicsRectItem):
     def updateBoundingRect(self):
         if isinstance(self.item, QDMTextItem):
             self.item.setTextWidth(self.rect().width())
-
         self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
-        #if self.item.boundingRect().height() > self.rect().height():
         self.setRect(self.item.boundingRect())
         self.setCenter(self.rect().center())
         self.updateHandlesPos()
@@ -163,11 +162,8 @@ class QDMBoundingRect(QGraphicsRectItem):
                     line = QLineF(centerPos, event.scenePos())
                     self.setRotation(90 - line.angle())
                     diff = self.handle.scenePos() - centerPos
-                    #self.secVect.setLine(0, 0, diff.x(), 0)
                     return True
 
-        # if (event.type() == event.GraphicsSceneMouseDoubleClickEvent):
-        #     self.item.mouseDoubleClickEvent(event)
         if (event.type() == event.GraphicsSceneMouseRelease
             and self._startPos is not None):
                 self._startPos = None
@@ -175,9 +171,6 @@ class QDMBoundingRect(QGraphicsRectItem):
         return super().sceneEventFilter(item, event)
 
     def mousePressEvent(self, mouseEvent):
-        """
-        Executed when the mouse is pressed on the item.
-        """
         self.handleSelected = self.handleAt(mouseEvent.pos())
         if self.handleSelected:
             self.mousePressPos = mouseEvent.pos()
@@ -185,18 +178,12 @@ class QDMBoundingRect(QGraphicsRectItem):
         super().mousePressEvent(mouseEvent)
 
     def mouseMoveEvent(self, mouseEvent):
-        """
-        Executed when the mouse is being moved over the item while being pressed.
-        """
         if self.handleSelected is not None:
             self.interactiveResize(mouseEvent.pos())
         else:
             super().mouseMoveEvent(mouseEvent)
 
     def mouseReleaseEvent(self, mouseEvent):
-        """
-        Executed when the mouse is released from the item.
-        """
         super().mouseReleaseEvent(mouseEvent)
         self.handleSelected = None
         self.mousePressPos = None
@@ -204,16 +191,10 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.update()
 
     def boundingRect(self):
-        """
-        Returns the bounding rect of the shape (including the resize handles).
-        """
         o = self.handleSize + self.handleSpace
         return self.rect().adjusted(-o, -o, o, o)
 
     def updateHandlesPos(self):
-        """
-        Update current resize handles according to the shape size and position.
-        """
         s = self.handleSize
         b = self.boundingRect()
         #self.handles[self.handleTopLeft] = QRectF(b.left(), b.top(), s, s)
@@ -226,18 +207,12 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.handles[self.handleBottomRight] = QRectF(b.right() - s, b.bottom() - s, s, s)
 
     def interactiveResize(self, mousePos):
-        """
-        Perform shape interactive resize.
-        """
         offset = self.handleSize + self.handleSpace
         boundingRect = self.boundingRect()
         rect = self.rect()
         diff = QPointF(0, 0)
-
         self.prepareGeometryChange()
-
         if self.handleSelected == self.handleMiddleRight:
-            print("MR")
             fromX = self.mousePressRect.right()
             toX = fromX + mousePos.x() - self.mousePressPos.x()
             diff.setX(toX - fromX)
@@ -245,18 +220,14 @@ class QDMBoundingRect(QGraphicsRectItem):
             if boundingRect.width() > self.minimalRect.width():
                 rect.setRight(boundingRect.right() - offset)
                 self.setRect(rect)
-
         if self.handleSelected == self.handleBottomMiddle:
-
             fromY = self.mousePressRect.bottom()
             toY = fromY + mousePos.y() - self.mousePressPos.y()
             diff.setY(toY - fromY)
             boundingRect.setBottom(toY)
             rect.setBottom(boundingRect.bottom() - offset)
             self.setRect(rect)
-
         if self.handleSelected == self.handleBottomRight:
-
             fromX = self.mousePressRect.right()
             fromY = self.mousePressRect.bottom()
             toX = fromX + mousePos.x() - self.mousePressPos.x()
@@ -279,9 +250,6 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.updateHandlesPos()
 
     def shape(self):
-        """
-        Returns the shape of this item as a QPainterPath in local coordinates.
-        """
         path = QPainterPath()
         path.addRect(self.rect())
         if self.isSelected():

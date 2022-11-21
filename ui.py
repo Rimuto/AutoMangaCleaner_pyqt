@@ -360,7 +360,7 @@ class Ui_MainWindow(object):
         self.height_spn.setRange(1, 100)
         self.height_spn.setValue(1)
         self.font_size_spn.setRange(1, 250)
-        self.font_size_spn.setValue(10)
+        self.font_size_spn.setValue(35)
         self.brush_size_spn.setRange(1, 1500)
         self.brush_size_spn.setValue(10)
         self.angle_spn.setRange(-360, 360)
