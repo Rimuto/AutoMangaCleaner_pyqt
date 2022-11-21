@@ -436,6 +436,8 @@ class Ui_MainWindow(object):
         self.graphicsView.setTextColor(color)
 
     def save(self):
+        if len(self.contexts) < 1:
+            return
         self.make_image()
         file = str(QFileDialog.getExistingDirectory())
         if file and len(self.contexts) != 0:
@@ -491,7 +493,7 @@ class Ui_MainWindow(object):
     def openColorPickerDialog(self):
         color = QColorDialog.getColor()
         if color.isValid():
-            print(color.name())
+            #print(color.name())
             return color
         return 0
 
@@ -577,7 +579,7 @@ class Ui_MainWindow(object):
                 self.model.appendRow(item)
 
                 name = os.path.basename(item.data())
-                print(item.data())
+                #(item.data())
                 img = self.read_image(item.data())
                 res, bboxes = detect.detect(nets, img.copy())
                 cl = []

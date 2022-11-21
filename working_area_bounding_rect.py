@@ -75,7 +75,7 @@ class QDMBoundingRect(QGraphicsRectItem):
         """
         Returns the resize handle below the given point.
         """
-        print(point)
+        #print(point)
         for k, v, in self.handles.items():
             if v.contains(point):
                 return k
