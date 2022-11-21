@@ -311,7 +311,9 @@ class Ui_MainWindow(object):
         # added
         self.graphicsView = WorkingArea(self.frame_3)
         self.graphicsView.setObjectName("graphicsView")
+        self.graphicsView.setMinimumSize(QtCore.QSize(819, 643))
         self.listWidget = QDMListWidget(self)
+        self.listWidget.setMinimumSize(QtCore.QSize(207, 443))
         self.horizontalLayout_3.addWidget(self.listWidget)
         # added
 
@@ -567,19 +569,6 @@ class Ui_MainWindow(object):
 
 
     def openFile(self):
-        # for i in range(5):
-        #     icon_path = os.getcwd() + r"\32.png"
-        #     text = f'{i}'
-        #     icon = QtGui.QIcon(icon_path)
-        #     item = QListWidgetItem(icon, text)
-        #     item.setCheckState(Qt.Unchecked)
-        #     self.listWidget.addItem(item)
-        # self.listWidget.setDragDropMode(self.listWidget.InternalMove)
-        # self.listWidget.setIconSize(QSize(300, 300))
-        # self.listWidget.setSelectionMode(True)
-
-
-
         file, _ = QFileDialog.getOpenFileNames()
         if file:
             for i, file in enumerate(file):
@@ -608,7 +597,7 @@ class Ui_MainWindow(object):
                     img[y: y + h, x: x + w] = cleaned
                 name, ext = os.path.splitext(name)
                 workingAreaScene = self.createWorkingAreaScene(img)
-                self.contexts[i] = {"scene": workingAreaScene, "cleaned": cl, "name": name, "ext": ext, "image": self.convertToQImage(img)}
+                self.contexts[len(self.contexts)] = {"scene": workingAreaScene, "cleaned": cl, "name": name, "ext": ext, "image": self.convertToQImage(img)}
             self.listWidget.setList(self.contexts[0]["cleaned"])
             self.graphicsView.setScene(self.contexts[0]["scene"])
         self.label.setText("1/" + str(len(self.contexts)))
