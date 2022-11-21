@@ -140,6 +140,14 @@ class QDMBoundingRect(QGraphicsRectItem):
         # self.secVect.setPos(center)
         self.setTransformOriginPoint(center)
 
+    #maybe it is better, i dunno. gonna think about it
+    # def updateBoundingRect_FontSizeChange(self):
+    #     self.item.setTextWidth(-1)
+    #     self.item.setTransformOriginPoint(self.item.boundingRect().width() / 2, self.item.boundingRect().height() / 2)
+    #     self.setRect(self.item.boundingRect())
+    #     self.setCenter(self.rect().center())
+    #     self.updateHandlesPos()
+
     def updateBoundingRect(self):
         if isinstance(self.item, QDMTextItem):
             self.item.setTextWidth(self.rect().width())
