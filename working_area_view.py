@@ -239,6 +239,7 @@ class QDMGraphicsView(QGraphicsView):
             t.select(QTextCursor.Document)
             html = item.item.toHtml()
             newItem = self.grScene.addText("text")
+            newItem.setPos(item.pos().x() + item.boundingRect().width(), item.pos().y() + item.boundingRect().height())
             newItem.item.setHtml(html)
             newItem.setRect(item.boundingRect())
             newItem.updateBoundingRect()
@@ -254,10 +255,6 @@ class QDMGraphicsView(QGraphicsView):
                     return False
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_D:
-            self.setDrawingMode(False)
-        if event.key() == Qt.Key_S:
-            self.setDrawingMode(True)
         if event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
             if not self.is_selected():
                 self.copy_items()
