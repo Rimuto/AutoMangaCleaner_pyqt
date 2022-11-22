@@ -188,8 +188,6 @@ class QDMGraphicsView(QGraphicsView):
                 self.setCursor(Qt.ClosedHandCursor)
                 self._dragPos = event.pos()
                 event.accept()
-            # else:
-            #     super(QDMGraphicsView, self).mousePressEvent(event)
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
@@ -207,9 +205,6 @@ class QDMGraphicsView(QGraphicsView):
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - diff.x())
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() - diff.y())
             event.accept()
-        #
-        # else:
-        #     super(QDMGraphicsView, self).mouseMoveEvent(event)
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -222,7 +217,6 @@ class QDMGraphicsView(QGraphicsView):
             if event.modifiers() & Qt.ControlModifier:
                 self.setCursor(Qt.OpenHandCursor)
             else:
-
                 self._isPanning = False
                 self.setCursor(Qt.ArrowCursor)
             self._mousePressed = False
