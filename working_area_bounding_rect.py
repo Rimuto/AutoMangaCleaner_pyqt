@@ -30,7 +30,10 @@ class QDMBoundingRect(QGraphicsRectItem):
         self.brush = QBrush(self.backgroundColor)
 
         self.setRect(item.boundingRect())
-        self.minimalRect = item.boundingRect()
+        mrect = QRect()
+        mrect.setHeight(20)
+        mrect.setWidth(20)
+        self.minimalRect = mrect# item.boundingRect()
         self.setFlags(self.ItemIsMovable | self.ItemIsSelectable | self.ItemIsFocusable)
         self.setFiltersChildEvents(True)
         #self.setZValue(100)

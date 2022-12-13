@@ -10,6 +10,7 @@ class QDMTextItem(QGraphicsTextItem):
         self.isMoving = False
         self.setSelected(False)
         self.setFlag(QGraphicsItem.ItemIsFocusable)
+        self.setFontSize(30)
 
     def setFontSize(self, value):
         def do(t):
